@@ -17,3 +17,5 @@ Route::get('/', function () {
 
 Route::get('/mail', 'MailController@mail');
 Route::get('/search', 'SearchController@search');
+Route::get('/bulk', 'BulkDomains@findURL');
+Route::get('/key', 'BulkKeywords@findKeywords');
