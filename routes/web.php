@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 
 Route::get('/mail', 'MailController@mail');
+Route::get('/search', 'SearchController@search');

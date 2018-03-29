@@ -11,18 +11,21 @@ class MailController extends Controller
         $already_crawled = array();
         $have_to_crawl = array();
         $mail_array = array();
-        $have_to_crawl[] = "https://www.konekt.lk/";
+        $have_to_crawl[] = "http://31.13.79.254/";
 
         for ($i = 0; $i < count($have_to_crawl); $i++) {
             if (array_key_exists($i, $have_to_crawl)) {
                 $received_content = self::getContent($have_to_crawl[$i]);
-                $mail_array[] = self::getMail($received_content);
+                $received_mails = self::getMail($received_content);
+                foreach ($received_mails as $received_mail) {
+                    if (!in_array($received_mail, $mail_array)) {
+                        $mail_array[] = $received_mail;
+                    }
+                }
                 $received_urls = self::getURL($received_content, $have_to_crawl[$i]);
                 foreach ($received_urls as $received_url) {
-                    if (!in_array($received_url,$already_crawled)) {
-                        if (!in_array($received_url, $have_to_crawl)) {
-                            $have_to_crawl[] = $received_url;
-                        }
+                    if (!in_array($received_url, $have_to_crawl)) {
+                        $have_to_crawl[] = $received_url;
                     }
                 }
                 if (!in_array($have_to_crawl[$i], $already_crawled)) {
@@ -44,9 +47,7 @@ class MailController extends Controller
         // Send the request
         $client->send($request, $response);
 
-        $content = $response->getContent();
-
-        return $content;
+        return $response->getContent();
     }
 
     public static function getMail($content){
@@ -85,12 +86,12 @@ class MailController extends Controller
             } elseif (substr($l, 0, 5) != "https" && substr($l, 0, 4) != "http") {
                 $l = parse_url($url)['scheme'] . "://" . parse_url($url)['host'] . "/" . $l;
             }
-            if (parse_url($url)['host'] == parse_url($l)['host']) {
-                $path = pathinfo(parse_url($l)['path'], PATHINFO_EXTENSION);
+//            if (parse_url($url)['host'] == parse_url($l)['host']) {
+                $path = pathinfo(isset(parse_url($l)['path']), PATHINFO_EXTENSION) ?: "";
                 if ($path == "" || $path == "html" || $path == "php" || $path == "asp") {
-                    $url_array[] = $l;
+                    $url_array[] = strtok($l, '#');
                 }
-            }
+//            }
         }
         return array_unique($url_array);
     }
