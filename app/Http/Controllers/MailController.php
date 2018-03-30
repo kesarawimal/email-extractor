@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\EMail;
 use App\Classes\HeadlessBrowser;
-use App\Classes\Mail;
 use App\Classes\URL;
+use App\Domain;
+use App\Mail;
+use App\Path;
 
 class MailController extends Controller
 {
@@ -12,16 +15,36 @@ class MailController extends Controller
         $already_crawled = array();
         $have_to_crawl = array();
         $mail_array = array();
-        $have_to_crawl[] = "https://www.000webhost.com/";
+
+        $have_to_crawl[] = "www.efitosolutions.com/";
+        if (substr($have_to_crawl[0], 0, 5) != "https" && substr($have_to_crawl[0], 0, 4) != "http") {
+            $have_to_crawl[0] = "http://" . $have_to_crawl[0];
+        }
+        //save domain
+        $domain = new Domain();
+        $domain->domain = parse_url($have_to_crawl[0])['host'];
+        $domain->save();
 
         for ($i = 0; $i < count($have_to_crawl); $i++) {
             if (array_key_exists($i, $have_to_crawl)) {
                 $received_content = HeadlessBrowser::getContent($have_to_crawl[$i]);
-                $received_mails = Mail::getMail($received_content);
+
+                //save paths
+                $path = new Path();
+                $path->domain_id = $domain->id;
+                $path->path = $have_to_crawl[$i];
+                $path->save();
+
+                $received_mails = EMail::getMail($received_content);
                 foreach ($received_mails as $received_mail) {
                     if (!in_array($received_mail, $mail_array)) {
                         $mail_array[] = $received_mail;
                     }
+                    //save mails
+                    $mail = new Mail();
+                    $mail->mail = $received_mail;
+                    $mail->save();
+                    $path->mailPaths()->attach($mail->id);
                 }
                 $received_urls = URL::getDomainURL($received_content, $have_to_crawl[$i]);
                 foreach ($received_urls as $received_url) {

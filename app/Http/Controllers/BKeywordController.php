@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class BulkKeywords extends Controller
+class BKeywordController extends Controller
 {
     public static function findKeywords() {
         $keywords = "

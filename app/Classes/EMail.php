@@ -9,7 +9,7 @@
 namespace App\Classes;
 
 
-class Mail
+class EMail
 {
     public static function getMail($content){
         $string = preg_replace('/[!#$%^&*()+=\_\[\]\';,\/{}|":<>?~\\\\]/'," ",$content);

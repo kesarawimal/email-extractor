@@ -17,5 +17,8 @@ Route::get('/', function () {
 
 Route::get('/mail', 'MailController@mail');
 Route::get('/search', 'SearchController@search');
-Route::get('/bulk', 'BulkDomains@findURL');
-Route::get('/key', 'BulkKeywords@findKeywords');
+Route::get('/bulk', 'BDomainController@findURL');
+Route::get('/key', 'BKeywordController@findKeywords');
+Route::get('/bulkmails', 'BMailController@findMails');
+Route::get('/uploadfile','BDomainController@index');
+Route::post('/uploadfile','BDomainController@showUploadFile');
