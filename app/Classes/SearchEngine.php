@@ -11,6 +11,15 @@ namespace App\Classes;
 
 class SearchEngine
 {
+    public static function search($keyword) {
+        $function_array = array("duckDuckGo", "bing", "yahoo", "aol", "ask");
+        do {
+            $func = array(new SearchEngine(), $function_array[mt_rand(0,4)]);
+            $array = $func($keyword);
+        } while (empty($array));
+        return $array;
+    }
+
     public static function duckDuckGo($keyword) {
         $search = "https://duckduckgo.com/?q=".urlencode($keyword)."&ia=web";
         $content = HeadlessBrowser::getContent($search);
@@ -67,7 +76,7 @@ class SearchEngine
         $list = URL::getURL($content, $search);
 
         $remove = function ($l) {
-            if (strpos($l, 'aol.com') !== false || strpos($l, 'tumblr.com') !== false || (bool)ip2long(@parse_url($l)['host']) !== false) {
+            if (strpos($l, 'aol.com') !== false || strpos($l, 'mapquest.com') !== false || strpos($l, 'rover.ebay.com') !== false || (bool)ip2long(@parse_url($l)['host']) !== false) {
                 unset($l);
             } else {
                 return $l;
@@ -83,7 +92,7 @@ class SearchEngine
         $list = URL::getURL($content, $search);
 
         $remove = function ($l) {
-            if (strpos($l, 'yahoo') !== false || strpos($l, 'tumblr.com') !== false || (bool)ip2long(@parse_url($l)['host']) !== false) {
+            if (strpos($l, 'ask.com') !== false || strpos($l, 'askmediagroup.com') || strpos($l, 'viglink.com') !== false || (bool)ip2long(@parse_url($l)['host']) !== false) {
                 unset($l);
             } else {
                 return $l;

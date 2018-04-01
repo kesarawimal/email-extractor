@@ -31,7 +31,7 @@ class MailController extends Controller
 
                 //save paths
                 $path = Path::firstOrCreate(
-                    ['domain_id' => $domain->id], ['path' => $have_to_crawl[$i]]
+                    ['path' => $have_to_crawl[$i]], ['domain_id' => $domain->id]
                 );
 
                 $received_mails = EMail::getMail($received_content);

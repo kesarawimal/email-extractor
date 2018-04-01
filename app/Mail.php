@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Mail extends Model
 {
+    # This property!
+    protected $fillable = ['mail'];
     const TABLE_NAME = 'mail';
     protected $table = self::TABLE_NAME;
 

@@ -8,7 +8,7 @@ class SearchController extends Controller
 {
     public static function search()
     {
-        $keyword = "hi there";
-        return SearchEngine::aol($keyword);
+        $keyword = "forum facebok";
+        return SearchEngine::search($keyword);
     }
 }

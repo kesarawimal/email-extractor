@@ -37,7 +37,9 @@ class URL
             }
             $path = isset(parse_url($l)['path']) ? pathinfo(parse_url($l)['path'], PATHINFO_EXTENSION) : "";
             if ($path == "" || $path == "html" || $path == "php" || $path == "asp") {
-                $url_array[] = strtok($l, '#');
+                if (filter_var($l, FILTER_VALIDATE_URL) !== false) {
+                    $url_array[] = strtok($l, '#');
+                }
             }
         }
         return array_unique($url_array);

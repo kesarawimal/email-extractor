@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Path extends Model
 {
+    # This property!
+    protected $fillable = ['domain_id','path'];
     protected $table = 'path';
 
     public function mails(){

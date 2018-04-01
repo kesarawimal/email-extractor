@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Maatwebsite\Excel\Facades\Excel;
 use Mockery\Exception;
 
 class BDomainController extends Controller
@@ -13,7 +14,7 @@ class BDomainController extends Controller
         $regex = '/((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z0-9\&\.\/\?\:@\-_=#])*/';
         preg_match_all($regex, $list, $match);
         $results = array_map('strtolower', array_unique($match[0]));
-        var_dump($results);
+        return $results;
     }
 
     public function index(){
@@ -21,9 +22,12 @@ class BDomainController extends Controller
     }
 
     public function showUploadFile(Request $request){
+        ob_start();
         $file = $request->file('domains');
         $destinationPath = 'domains';
         $file->storeAs($destinationPath,$file->getClientOriginalName());
+
+//        return self::fileRead($file->getClientOriginalName());
 
         $parse = self::findURL(self::fileRead($file->getClientOriginalName()));
         Excel::create('Customers', function($excel) use ($parse) {
@@ -33,7 +37,7 @@ class BDomainController extends Controller
             $sheet->setOrientation('landscape');
             $sheet->fromArray($parse, NULL, 'A3');
             });
-        })->download('xlsx');
+        })->download('csv');
     }
 
     public static function fileRead($filename) {
