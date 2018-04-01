@@ -9,6 +9,6 @@ class SearchController extends Controller
     public static function search()
     {
         $keyword = "hi there";
-        return SearchEngine::duckDuckGo($keyword);
+        return SearchEngine::aol($keyword);
     }
 }

@@ -25,6 +25,72 @@ class SearchEngine
             }
         };
         $url = array_map($remove, $list);
-        return array_filter($url);
+        return array_values(array_filter($url));
     }
+
+    public static function bing($keyword) {
+        $search = "https://www.bing.com/search?q=".urlencode($keyword);
+        $content = HeadlessBrowser::getContent($search);
+
+        $list = URL::getURL($content, $search);
+
+        $remove = function ($l) {
+            if (strpos($l, 'bing.com') !== false || strpos($l, 'microsoft.com') !== false) {
+                unset($l);
+            } else {
+                return $l;
+            }
+        };
+        $url = array_map($remove, $list);
+        return array_values(array_filter($url));
+    }
+
+    public static function yahoo($keyword) {
+        $search = "https://search.yahoo.com/search?p=".urlencode($keyword);
+        $content = HeadlessBrowser::getContent($search);
+        $list = URL::getURL($content, $search);
+
+        $remove = function ($l) {
+            if (strpos($l, 'yahoo') !== false || strpos($l, 'tumblr.com') !== false || (bool)ip2long(@parse_url($l)['host']) !== false) {
+                unset($l);
+            } else {
+                return $l;
+            }
+        };
+        $url = array_map($remove, $list);
+        return array_values(array_filter($url));
+    }
+
+    public static function aol($keyword) {
+        $search = "https://search.aol.com/aol/search?q=".urlencode($keyword);
+        $content = HeadlessBrowser::getContent($search);
+        $list = URL::getURL($content, $search);
+
+        $remove = function ($l) {
+            if (strpos($l, 'aol.com') !== false || strpos($l, 'tumblr.com') !== false || (bool)ip2long(@parse_url($l)['host']) !== false) {
+                unset($l);
+            } else {
+                return $l;
+            }
+        };
+        $url = array_map($remove, $list);
+        return array_values(array_filter($url));
+    }
+
+    public static function ask($keyword) {
+        $search = "https://www.ask.com/web?q=".urlencode($keyword);
+        $content = HeadlessBrowser::getContent($search);
+        $list = URL::getURL($content, $search);
+
+        $remove = function ($l) {
+            if (strpos($l, 'yahoo') !== false || strpos($l, 'tumblr.com') !== false || (bool)ip2long(@parse_url($l)['host']) !== false) {
+                unset($l);
+            } else {
+                return $l;
+            }
+        };
+        $url = array_map($remove, $list);
+        return array_values(array_filter($url));
+    }
+
 }

@@ -15,7 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/mail', 'MailController@mail');
+Route::get('/mail', function () {
+    return view('domain');
+});
+Route::post('/mail', 'MailController@mail');
 Route::get('/search', 'SearchController@search');
 Route::get('/bulk', 'BDomainController@findURL');
 Route::get('/key', 'BKeywordController@findKeywords');

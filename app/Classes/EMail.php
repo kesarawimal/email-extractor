@@ -12,14 +12,9 @@ namespace App\Classes;
 class EMail
 {
     public static function getMail($content){
-        $string = preg_replace('/[!#$%^&*()+=\_\[\]\';,\/{}|":<>?~\\\\]/'," ",$content);
-        $string = preg_split('/\s+/',$string);
-        $email = array();
-        foreach ($string as $str) {
-            if (filter_var($str, FILTER_VALIDATE_EMAIL)) {
-                $email[] = $str;
-            }
-        }
-        return array_unique($email);
+        $regex = '/[a-z0-9]+[_a-z0-9\.-]*[a-z0-9]+@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})/i';
+        preg_match_all($regex, $content, $match);
+        $results = array_map('strtolower', array_unique($match[0]));
+        return $results;
     }
 }
