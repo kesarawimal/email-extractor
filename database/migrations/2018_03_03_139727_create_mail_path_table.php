@@ -19,7 +19,7 @@ class CreateMailPathTable extends Migration
                 ->on('path')->onDelete('cascade');
             $table->integer('mail_id')->unsigned()->nullable();
             $table->foreign('mail_id')->references('id')
-                ->on('mails')->onDelete('cascade');
+                ->on('mail')->onDelete('cascade');
             $table->timestamps();
         });
     }
